@@ -267,7 +267,7 @@ const contentCommit = async (props: ContentCommitProps): Promise<void> => {
     
     const { data: {
       number: pullNumber,
-    }} = await axios.post<any, AxiosResponse<any, any>, any>(`https://api.github.com/repos/${owner}/${repo}/pulls`, {
+    }} = await axios.post<any, AxiosResponse<any, any>, any>(`https://api.github.com/repos/dewen/${repo}/pulls`, {
       owner,
       repo,
       title: 'chore(content): publish updates',
