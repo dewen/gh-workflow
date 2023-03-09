@@ -11,6 +11,6 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: dispatch trigger
-      # if: github.event == 'publish-product'
+      if: github.event.action == 'publish-product'
       run: |
         echo "repository_dispatch triggered"
