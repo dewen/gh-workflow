@@ -4,12 +4,13 @@ env:
 on:
   workflow_dispatch:
   repository_dispatch:
-    types: [product-publish]
+    types: ["product-publish"]
 jobs:
   publish:
     runs-on: ubuntu-latest
-    if: github.event.action == "publish-product"
     steps:
-      - name: Checkout
-        run: |
-          echo "repository_dispatch triggered"
+    - uses: actions/checkout@v1
+    - name: dispatch trigger
+      if: github.event.action == "publish-product"
+      run: |
+        echo "repository_dispatch triggered"
