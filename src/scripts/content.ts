@@ -25,6 +25,8 @@ const getTempPath = async () => fs.promises.realpath(os.tmpdir());
 
 // @todo: unittest
 const getGitWebUrl = (url: string) => {
+  console.log(`Get git web url from: ${url}`);
+  
   if (/^https:\/\/(.+)(\.git)?$/i.test(url)) {
     return url;
   }
