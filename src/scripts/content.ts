@@ -46,11 +46,14 @@ const getRepoInfo = (url: string): {
     if (!httpsMatch) {
       throw new Error(`Invalid git url: ${url}`);
     }
+    console.log('httpsMatch: ', httpsMatch);
     return {
       owner: httpsMatch[2],
       repo: httpsMatch[3],
     }
   }
+  console.log('gitMatch: ', gitMatch);
+  
   return {
     owner: gitMatch[2],
     repo: gitMatch[3],
