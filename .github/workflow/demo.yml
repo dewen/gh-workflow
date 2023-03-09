@@ -1,0 +1,15 @@
+name: Product Publish
+env:
+  CI: true
+on:
+  workflow_dispatch:
+  repository_dispatch:
+    types: ["product-publish"]
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    if: github.event.action == "publish-product"
+    steps:
+      - name: Checkout
+        run: |
+          echo "repository_dispatch triggered"
