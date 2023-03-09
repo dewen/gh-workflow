@@ -1,5 +1,6 @@
 import git from 'isomorphic-git';
 import http from 'isomorphic-git/http/node';
+import axios from 'axios';
 import yargs from 'yargs';
 import * as fs from 'fs';
 import * as os from 'os';
@@ -33,6 +34,27 @@ const getGitWebUrl = (url: string) => {
   }
   return `https://${match[1]}/${match[2]}.git`;
 };
+const getRepoInfo = (url: string): {
+  owner: string;
+  repo: string;
+} => {
+  const gitMatch = url.match(/^git@(.+):(.+)\.git$/);
+  if (!gitMatch) {
+    const httpsMatch = url.match(/^https:\/\/([^\/]+)\/([^\/]+)\/([^\.]+)(\.git)?$/i);
+    if (!httpsMatch) {
+      throw new Error(`Invalid git url: ${url}`);
+    }
+    return {
+      owner: httpsMatch[2],
+      repo: httpsMatch[3],
+    }
+  }
+  return {
+    owner: gitMatch[2],
+    repo: gitMatch[3],
+  }
+};
+
 
 const getGitCredentials = () => ({
   username: process.env.CONTENT_PUBLISH_GIT_USERNAME || '',
@@ -100,6 +122,7 @@ const validateInput = async (props: ContentCommitProps) => {
 // Commit content updates from a temp checkout.
 const contentCommit = async (props: ContentCommitProps): Promise<void> => {
   const {
+    base,
     script,
     path: contentPath$,
     message: commitMessage,
@@ -113,6 +136,11 @@ const contentCommit = async (props: ContentCommitProps): Promise<void> => {
     const authorName = process.env.CONTENT_PUBLISH_AUTHOR_NAME || 'john';
     const authorEmail = process.env.CONTENT_PUBLISH_AUTHOR_EMAIL || 'john@example.com';
     const workingPath = resolve(tempPath, `${prefix}${uuid()}`);
+    const {
+      owner,
+      repo,
+    } = getRepoInfo(gitUrl);
+
     await git.clone({
       fs,
       http,
@@ -226,8 +254,22 @@ const contentCommit = async (props: ContentCommitProps): Promise<void> => {
       console.log('Failed to push changes: ', error);
       throw new Error(error);
     }
+
+    // Create pull request.
+    await axios.post(`/repos/${owner}/${repo}/pulls`, {
+      owner,
+      repo,
+      title: 'chore(content): publish updates',
+      body: '',
+      head: contentPublishBranch,
+      base,
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/vnd.github+json',
+      }
+    })
   } catch (error) {
-    console.log('Failed to publish updates: ', error);
+    console.log('Failed to create content publish PR: ', error);
   }
 };
 
