@@ -8,28 +8,27 @@ on:
 jobs:
   publish:
     runs-on: ubuntu-latest
+    if: ${{ github.event.action == 'product-publish' }}
     steps:
-    - uses: actions/checkout@v3
-    - name: dispatch trigger
-      if: github.event.action == 'product-publish'
-      run: |
-        echo "repository_dispatch triggered"
-    - name: Use node v16.14
-      uses: actions/setup-node@v3
-      with:
-        node-version: 16.14
-    # @todo: diff setup process
-    - name: Setup and build packages
-      run: npm install && npm run build
-    # @todo: pull update from remote
-    # -name: fetch product
-    #  run: npm run fetch-product
-    - name: Publish
-      run: npm run build:content-publish
-      env:
-        NEW_BRANCH: xxxxx
-    # @todo: Create PR by github api
-    - name: Pull request
-      run: echo "New branch is $NEW_BRANCH"
+      - uses: actions/checkout@v3
+      - name: Git info
+        run: git remote -v
+      - name: Use node v16.14
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.14
+      # @todo: diff setup process
+      - name: Setup and build packages
+        run: npm install && npm run build
+      # @todo: pull update from remote
+      # -name: fetch product
+      #  run: npm run fetch-product
+      - name: Publish
+        run: npm run build:content-publish
+        env:
+          NEW_BRANCH: xxxxx
+      # @todo: Create PR by github api
+      - name: Pull request
+        run: echo "New branch is $NEW_BRANCH"
 
     
