@@ -19,7 +19,7 @@ type ContentCommitProps = {
   tempPath: string;
 };
 
-const DEFAULT_BASE_BRANCH = 'main';
+const DEFAULT_BASE_BRANCH = 'content-publish';
 
 const getTempPath = async () => fs.promises.realpath(os.tmpdir());
 

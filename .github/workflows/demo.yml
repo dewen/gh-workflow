@@ -3,7 +3,7 @@ env:
   CI: true
   CONTENT_PUBLISH_GIT_USERNAME: ${{ secrets.CONTENT_PUBLISH_GIT_USERNAME }}
   CONTENT_PUBLISH_GIT_PASSWORD: ${{ secrets.CONTENT_PUBLISH_GIT_PASSWORD }}
-  DEFAULT_BASE_BRANCH: ${{ secrets.DEFAULT_BASE_BRANCH }}
+  DEFAULT_BASE_BRANCH: ${{ vars.DEFAULT_BASE_BRANCH }}
 on:
   workflow_dispatch:
   repository_dispatch:
@@ -28,10 +28,5 @@ jobs:
       #  run: npm run fetch-product
       - name: Publish
         run: npm run build:content-publish
-        env:
-          NEW_BRANCH: xxxxx
-      # @todo: Create PR by github api
-      - name: Pull request
-        run: echo "New branch is ${{ env.NEW_BRANCH }}"
 
     
