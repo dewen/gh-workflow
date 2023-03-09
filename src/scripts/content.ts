@@ -260,7 +260,7 @@ const contentCommit = async (props: ContentCommitProps): Promise<void> => {
     // response type: node_modules/axios/index.d.ts
     const { data: {
       number: pullNumber,
-    }} = await axios.post<any, AxiosResponse<any, any>, any>(`repos/${owner}/${repo}/pulls`, {
+    }} = await axios.post<any, AxiosResponse<any, any>, any>(`https://api.github.com/repos/${owner}/${repo}/pulls`, {
       owner,
       repo,
       title: 'chore(content): publish updates',
@@ -279,7 +279,7 @@ const contentCommit = async (props: ContentCommitProps): Promise<void> => {
       throw new Error('Failed to retrieve content publish PR number.');
     }
 
-    await axios.put<any, AxiosResponse<any, any>, any>(`repos/${owner}/${repo}/pulls/${pullNumber}/merge`, {
+    await axios.put<any, AxiosResponse<any, any>, any>(`https://api.github.com/repos/${owner}/${repo}/pulls/${pullNumber}/merge`, {
       owner,
       repo,
       baseURL: 'https://api.github.com/',
