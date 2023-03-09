@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc -b ./tsconfig.cjs.json",
+    "build:content-publish": "node lib/scripts/content.js --script 'echo \"{id:100}\" > src/id.json'",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
