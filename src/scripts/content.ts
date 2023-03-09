@@ -1,6 +1,6 @@
 import git from 'isomorphic-git';
 import http from 'isomorphic-git/http/node';
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import yargs from 'yargs';
 import * as fs from 'fs';
 import * as os from 'os';
@@ -256,13 +256,33 @@ const contentCommit = async (props: ContentCommitProps): Promise<void> => {
     }
 
     // Create pull request.
-    await axios.post(`/repos/${owner}/${repo}/pulls`, {
+    // https://docs.github.com/en/rest/pulls/pulls?apiVersion=2022-11-28#create-a-pull-request
+    // response type: node_modules/axios/index.d.ts
+    const { data: {
+      number: pullNumber,
+    }} = await axios.post<any, AxiosResponse<any, any>, any>(`/repos/${owner}/${repo}/pulls`, {
       owner,
       repo,
       title: 'chore(content): publish updates',
       body: '',
       head: contentPublishBranch,
       base,
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/vnd.github+json',
+      }
+    });
+
+    if (!pullNumber) {
+      throw new Error('Failed to retrieve content publish PR number.');
+    }
+
+    await axios.put<any, AxiosResponse<any, any>, any>(`/repos/${owner}/${repo}/pulls/${pullNumber}/merge`, {
+      owner,
+      repo,
+      pull_number: pullNumber,
+      commit_title: `Merge pull request ${pullNumber}`,
+      commit_message: 'Publish content',
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/vnd.github+json',
