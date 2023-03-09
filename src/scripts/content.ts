@@ -260,7 +260,7 @@ const contentCommit = async (props: ContentCommitProps): Promise<void> => {
     // response type: node_modules/axios/index.d.ts
     const { data: {
       number: pullNumber,
-    }} = await axios.post<any, AxiosResponse<any, any>, any>(`/repos/${owner}/${repo}/pulls`, {
+    }} = await axios.post<any, AxiosResponse<any, any>, any>(`repos/${owner}/${repo}/pulls`, {
       owner,
       repo,
       title: 'chore(content): publish updates',
@@ -269,6 +269,7 @@ const contentCommit = async (props: ContentCommitProps): Promise<void> => {
       base,
       baseURL: 'https://api.github.com',
       headers: {
+        'Authorization': `Bearer ${gitPassword}`,
         'Content-Type': 'application/json',
         'Accept': 'application/vnd.github+json',
       }
@@ -278,13 +279,15 @@ const contentCommit = async (props: ContentCommitProps): Promise<void> => {
       throw new Error('Failed to retrieve content publish PR number.');
     }
 
-    await axios.put<any, AxiosResponse<any, any>, any>(`/repos/${owner}/${repo}/pulls/${pullNumber}/merge`, {
+    await axios.put<any, AxiosResponse<any, any>, any>(`repos/${owner}/${repo}/pulls/${pullNumber}/merge`, {
       owner,
       repo,
+      baseURL: 'https://api.github.com',
       pull_number: pullNumber,
       commit_title: `Merge pull request ${pullNumber}`,
       commit_message: 'Publish content',
       headers: {
+        'Authorization': `Bearer ${gitPassword}`,
         'Content-Type': 'application/json',
         'Accept': 'application/vnd.github+json',
       }
