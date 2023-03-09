@@ -32,6 +32,6 @@ jobs:
           NEW_BRANCH: xxxxx
       # @todo: Create PR by github api
       - name: Pull request
-        run: echo "New branch is $NEW_BRANCH"
+        run: echo "New branch is ${{ env.NEW_BRANCH }}"
 
     
