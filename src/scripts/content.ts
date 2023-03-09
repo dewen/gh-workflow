@@ -24,7 +24,7 @@ const getTempPath = async () => fs.promises.realpath(os.tmpdir());
 
 // @todo: unittest
 const getGitWebUrl = (url: string) => {
-  if (/^https:\/\/(.+)\.git$/i.test(url)) {
+  if (/^https:\/\/(.+)(\.git)?$/i.test(url)) {
     return url;
   }
   const match = url.match(/^git@(.+):(.+)\.git$/);
