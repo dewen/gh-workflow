@@ -267,6 +267,7 @@ const contentCommit = async (props: ContentCommitProps): Promise<void> => {
       body: '',
       head: contentPublishBranch,
       base,
+      baseURL: 'https://api.github.com',
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/vnd.github+json',
