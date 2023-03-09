@@ -141,7 +141,7 @@ const contentCommit = async (props: ContentCommitProps): Promise<void> => {
     });
     console.log('Checkout branch: ', contentPublishBranch);
 
-    const cmd = `npm run build && ${script}`;
+    const cmd = `npm i && npm run build && ${script}`;
     try {
       console.log(`Starting - npm run setup && npm run build && ${script}`);
       execSync(cmd, {
