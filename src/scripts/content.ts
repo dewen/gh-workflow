@@ -267,7 +267,7 @@ const contentCommit = async (props: ContentCommitProps): Promise<void> => {
       body: '',
       head: contentPublishBranch,
       base,
-      baseURL: 'https://api.github.com',
+      baseURL: 'https://api.github.com/',
       headers: {
         'Authorization': `Bearer ${gitPassword}`,
         'Content-Type': 'application/json',
@@ -282,7 +282,7 @@ const contentCommit = async (props: ContentCommitProps): Promise<void> => {
     await axios.put<any, AxiosResponse<any, any>, any>(`repos/${owner}/${repo}/pulls/${pullNumber}/merge`, {
       owner,
       repo,
-      baseURL: 'https://api.github.com',
+      baseURL: 'https://api.github.com/',
       pull_number: pullNumber,
       commit_title: `Merge pull request ${pullNumber}`,
       commit_message: 'Publish content',
