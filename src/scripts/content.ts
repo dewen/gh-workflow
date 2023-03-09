@@ -258,6 +258,8 @@ const contentCommit = async (props: ContentCommitProps): Promise<void> => {
     // Create pull request.
     // https://docs.github.com/en/rest/pulls/pulls?apiVersion=2022-11-28#create-a-pull-request
     // response type: node_modules/axios/index.d.ts
+    console.log('Creating pull request...', `https://api.github.com/repos/${owner}/${repo}/pulls`);
+    
     const { data: {
       number: pullNumber,
     }} = await axios.post<any, AxiosResponse<any, any>, any>(`https://api.github.com/repos/${owner}/${repo}/pulls`, {
